@@ -7,12 +7,17 @@
     //global variables
     const tru = true;
     const fals = false;
-    var pxStyles = ['top', 'right', 'bottom', 'left', 'width', 'height', 'maxWidth', 'maxHeight', 'fontSize'];
-    var pxStylesPrefix = ['border', 'padding', 'margin'];
-    var pxStylesSuffix = ['Top', 'Right', 'Bottom', 'Left'];
-    var listeners = []; //used for capturing event listeners from $('').on 
-    //listeners = [{ elem: null, events: [{ name: '', list: [] }] }];
+    const doc = document;
+    var pxStyles = ['top', 'right', 'bottom', 'left', 'width', 'height', 'maxWidth', 'maxHeight', 'fontSize'],
+        pxStylesPrefix = ['border', 'padding', 'margin'],
+        pxStylesSuffix = ['Top', 'Right', 'Bottom', 'Left'],
+        listeners = []; //used for capturing event listeners from $('').on 
+    //listeners = [{ elem: null, events: [{ name: '', list: [[selector, event]] }] }];
 
+    var idMatch = /^#[\w-]*$/,
+        classMatch = /^\.[\w-]*$/,
+        htmlMatch = /<.+>/,
+        singlet = /^\w+$/;
 
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -29,58 +34,25 @@
         return this;
     }
 
-    function query(target, sel) {
+    function query(context, selector) {
         //gets a list of elements from a CSS selector
-        if (target == null) { return [];}
+        if (context == null) { return [];}
         var elems = [];
-        if (isType(sel,4)) {
+        if (isType(selector,4)) {
             //elements are already defined instead of using a selector /////////////////////////////////////
-            elems = isType(sel, 5) ? sel : [sel];
-        } else if (sel != null && sel != '') {
+            elems = isType(selector, 5) ? selector : [selector];
+        } else if (selector != null && selector != '') {
             //only use vanilla Javascript to select DOM elements based on a CSS selector (Chrome 1, IE 9, Safari 3.2, Firefox 3.5, Opera 10)
-            var sels = sel.split(',').map(function (s) { return s.trim(); }),
-                el, optimize = tru, n, s, t, u, v;
-
-            for (var x in sels) {
-                s = sels[x];
-                //check if we can optimize our query selector
-                optimize = tru;
-                el = null;
-                n = s.indexOf(' ') < 0 && s.indexOf(':') < 0;
-                t = target == document;
-                u = s.indexOf('.');
-                v = s.indexOf('#');
-                if (n && v == 0 && t) {
-                } else if (n && v < 0 && u < 0) {
-                    if (s.indexOf("[") >= 0 && !t) { optimize = fals;}
-                } else if (n && u == 0 && s.indexOf('.', 1) < 0) {
-                }else if(s == '*'){
-                }else{optimize = fals;}
-
-                if(optimize){
-                    //query is optimized, so don't use getQuerySelectorAll
-                    if (v == 0) {
-                        if (t && n) {
-                            //get specific element by ID
-                            el = document.getElementById(s.substr(1));
-                            if (el) { elems.push(el);}
-                        }
-                    } else if (n){
-                            //get elements by tag name or by class name(s)
-                        el = u < 0 ? 
-                            el = target.getElementsByTagName(s) : 
-                            target.getElementsByClassName(s.replace(/\./g, ' '));
-                    }
-                }else{
-                    //query is not optimized, last resort is to use querySelectorAll (slow)
-                    el = target.querySelectorAll(sel);
-                }
-                if (el) {
-                    //convert node list into array
-                    for (var i = el.length; i--; elems.unshift(el[i])) { };
-                }
-                if(!optimize){return elems;}
-            }
+            context = context || doc;
+            var el = (
+                classMatch.test(selector) ?
+                    context.getElementsByClassName(selector.slice(1)) :
+                    singlet.test(selector) ?
+                        context.getElementsByTagName(selector) :
+                        context.querySelectorAll(selector)
+            );
+            //convert node list into array
+            for (var i = el.length; i--; elems.unshift(el[i])) { };
         }
         return elems;
     }
