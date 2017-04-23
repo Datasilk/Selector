@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>selector.js</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="row pad">
+    <h1>
+      Selector.js
+    </h1>
+    <p>
+      A micro javascript library used as a replacement for jQuery, weighing in at nearly 5KB. <br/>Below are a set of tests
+      that will work in both jQuery and selector.js.
+    </p>
+  </div>
+  <div class="header pad-width-lg pad-height">
+    <div class="row buttons">
+      <div class="col pad">
+        <a href="javascript:" class="button hello-world">Hello World</a>
+      </div>
+      <div class="col pad">
+        <a href="javascript:" class="button change-style">Stylize</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="row pad">
+    <input type="text" id="texter" placeholder="type things here..." />
+  </div>
+  <div class="row pad">
+    <div class="row pad result">mimic things here...</div>
+  </div>
+  <div class="row pad">
+    <div class="row teleport">
+      <div class="col pad-lg">
+        <a href="javascript:" class="button">Teleport</a>
+      </div>
+      <div class="col beam pad-lg">...beam me up, Scotty.</div>
+      <div class="col platform pad">
+      </div>
+    </div>
+  </div>
+  </div>
+</body>
+<script src="../../dist/selector.js"></script>
+<script src="velocity.js"></script>
+<script src="test.js"></script>
+
+</html>

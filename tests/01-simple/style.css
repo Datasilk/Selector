@@ -1,0 +1,23 @@
+*{box-sizing:border-box;}
+body{font-family:Arial, Helvetica, sans-serif;}
+.header{height:108px;}
+.button{color:#fff; background:#56bf94; padding:7px 15px; border-radius:4px;box-shadow:3px 3px 0px rgba(0,0,0,0.15);}
+.button:link{text-decoration:none;}
+.button:hover{background:#1bcd84;}
+.row{width:100%; box-sizing:border-box;}
+.row:after{visibility:hidden; display:block; font-size:0; content:" "; clear:both; height:0;}
+.col{float:left; position:relative; display:inline-block;}
+.pad{padding:15px;}
+.pad-lg{padding:30px;}
+.pad-width-lg{padding-left:30px; padding-right:30px;}
+.pad-height{padding-top:15px; padding-bottom:15px;}
+.result{background-color:#b3d9ff;}
+.teleport{background-color:#ffcce0; color:#e600ac;}
+.teleport .button{background-color:#e600ac;}
+.teleport .button:hover{background-color:#ff3399;}
+/* input placeholder text color */
+input[type=text]{padding:8px 15px; font-size:17px; width:90%;}
+input[type=text]::-webkit-input-placeholder { /* Chrome/Opera/Safari */ color: #ccc;}
+input[type=text]::-moz-placeholder { /* Firefox 19+ */ color: #ccc;}
+input[type=text]:-ms-input-placeholder { /* IE 10+ */ color: #ccc;}
+input[type=text]:-moz-placeholder { /* Firefox 18- */ color: #ccc;}

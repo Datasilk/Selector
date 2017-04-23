@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>selector.js</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="row pad">
+        <h3>Over 9,000!?!?</h3>
+        <p>This test only works if running on a local / remote server. 
+            Do not load this html file into your web browser or you will get a cross-origin error!
+        </p>
+
+    <div class="row pad">
+        <div class="col pad-right">
+            <select id="select_framework">
+                <option value="jquery">jQuery 3.2.0</option>
+                <option value="zepto">Zepto 1.2.0</option>
+                <option value="selector">Selector.js</option>
+                <option value="all">All three!</option>
+            </select>
+        </div>
+        <div class="col pad-right">
+            <select id="select_times">
+                <option value="1">1 time</option>
+                <option value="5">5 times</option>
+                <option value="10">10 times</option>
+            </select>
+        </div>
+        <div class="col">
+            <a href="javascript:" class="button">Run Test</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col pad-right results_jquery">
+            <h4>jQuery results</h4>
+            <div class="content"></div>
+        </div>
+        <div class="col pad-right results_zepto">
+            <h4>Zepto results</h4>
+            <div class="content"></div>
+        </div>
+        <div class="col pad-right results_selector">
+            <h4>Selector.js results</h4>
+            <div class="content"></div>
+        </div>
+    </div>
+    <iframe id="iframe_jquery" src="iframe_jquery.html"></iframe>
+    <iframe id="iframe_zepto" src="iframe_zepto.html"></iframe>
+    <iframe id="iframe_selector" src="iframe_selector.html"></iframe>
+    
+</body>
+<script src="test.js"></script>
+</html>
