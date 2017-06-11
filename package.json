@@ -1,6 +1,6 @@
 {
-  "name": "Selector",
-  "version": "0.9.0",
+  "name": "selectorjs",
+  "version": "0.9.12",
   "description": "A modern micro JS library that replaces the most common functionality of jQuery",
   "main": "gulpfile.js",
   "dependencies": {

@@ -124,7 +124,12 @@
 
     function getObj(obj) {
         //get a string from object (either string, number, or function)
-        if (isType(obj,6)) {
+        if (!obj) { return obj; }
+        if (isType(obj, 5)) {
+            //handle object as array
+            return obj[0];
+        }
+        else if (isType(obj, 6)) {
             //handle object as function (get value from object function execution)
             return getObj(obj());
         }
@@ -742,14 +747,26 @@
         },
 
         is: function (selector) {
-            //Check if the first element of the current collection matches the CSS select.
+            //Check if all the elements of the current collection matches the CSS select.
             if (this.length > 0) {
                 var self = this;
                 var obj = getObj(selector);
-                var q = query(document, obj);
-                if (q.some(function (a) { return a == self[0] })) {
-                    return tru;
+                for (var x = 0; x < this.length; x++) {
+                    switch (obj) {
+                        case ':focus':
+                            if (this[x] == document.activeElement) {
+                                return tru;
+                            }
+                            break;
+                        default:
+                            var q = query(this[x].parentNode, obj);
+                            if (q.some(function (a) { return a == self[0] })) {
+                                return tru;
+                            }
+                            break;
+                    }
                 }
+                
             }
             return fals;
         },
