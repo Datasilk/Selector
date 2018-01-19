@@ -776,6 +776,7 @@
             var elems = [];
             if (this.length > 0) {
                 elems = [this[this.length - 1]];
+                console.log(["elems", elems]);
             }
             return clone(elems);
         },
