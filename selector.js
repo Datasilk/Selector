@@ -383,9 +383,8 @@
                 for (var x in params) {
                     //if params is an object with key/value pairs, apply styling to elements\
                     haskeys = tru;
-                    var name = styleName(x);
                     this.each(function (e) {
-                        setStyle(e, name, params[x]);
+                        setStyle(e, x, params[x]);
                     });
                 }
                 if (haskeys) { return this; }
@@ -992,7 +991,6 @@
                     });
                 }
             }
-
             return this;
         },
 
