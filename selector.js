@@ -784,12 +784,11 @@
             //Iterate through every element of the collection. Inside the iterator function, 
             //this keyword refers to the current item  = function(also passed as the second argument to the function). 
             //If the iterator select.prototype.returns 0, iteration stops.
+            var mapped = [];
             for (var x = 0; x < this.length; x++) {
-                if (func(x, this[x]) == fals) {
-                    break;
-                }
+                mapped.push(func(x, this[x])); 
             }
-            return this;
+            return mapped;
         },
 
         next: function (selector) {
