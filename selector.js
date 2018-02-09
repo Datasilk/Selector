@@ -195,14 +195,17 @@
 
     function insertContent(obj, elements, stringFunc, objFunc) {
         //checks type of object and execute callback functions depending on object type
-        var type = isType(obj,1);
-        for (var x = 0; x < elements.length; x++) {
-            if (type) {
+        var type = isType(obj, 1);
+        if (type == tru) {
+            for (var x = 0; x < elements.length; x++) {
                 stringFunc(elements[x]);
-            } else {
-                objFunc(elements[x]); 
+            }
+        } else {
+            for (var x = 0; x < elements.length; x++) {
+                objFunc(elements[x]);
             }
         }
+        
         return this;
     }
 
@@ -324,7 +327,6 @@
             //The content can be an HTML string, a DOM node or an array of nodes.
             var obj = getObj(content);
             if (isArrayThen(obj, this.before) || obj == null) { return this; }
-
             insertContent(obj, this,
                 function (e) { e.insertAdjacentHTML('beforebegin', obj); },
                 function (e) { e.parentNode.insertBefore(obj, e); }
