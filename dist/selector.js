@@ -195,14 +195,17 @@
 
     function insertContent(obj, elements, stringFunc, objFunc) {
         //checks type of object and execute callback functions depending on object type
-        var type = isType(obj,1);
-        for (var x = 0; x < elements.length; x++) {
-            if (type) {
+        var type = isType(obj, 1);
+        if (type == tru) {
+            for (var x = 0; x < elements.length; x++) {
                 stringFunc(elements[x]);
-            } else {
-                objFunc(elements[x]); 
+            }
+        } else {
+            for (var x = 0; x < elements.length; x++) {
+                objFunc(elements[x]);
             }
         }
+        
         return this;
     }
 
@@ -216,7 +219,7 @@
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     select.prototype = {
 
-        add: function (elems) {
+        add: (elems) =>  {
             //Add new (unique) elements to the existing elements array
             var obj = getObj(elems);
             if (!obj) { return this; }
@@ -231,7 +234,7 @@
             return this;
         },
 
-        addClass: function (classes) {
+        addClass: (classes) =>  {
             //Add class name to each of the elements in the collection. 
             //Multiple class names can be given in a space-separated string.
             if (this.length > 0) {
@@ -258,7 +261,7 @@
             return this;
         },
 
-        after: function (content) {
+        after: (content) => {
             //Add content to the DOM after each elements in the collection. 
             //The content can be an HTML string, a DOM node or an array of nodes.
             var obj = getObj(content);
@@ -271,14 +274,14 @@
             return this;
         },
 
-        animate: function (props, options) {
+        animate: (props, options) => {
             if (typeof (Velocity) != 'undefined') {
                 Velocity(this, props, options);
             }
             return this;
         },
 
-        append: function (content) {
+        append: (content) => {
             //Append content to the DOM inside each individual element in the collection. 
             //The content can be an HTML string, a DOM node or an array of nodes.
 
@@ -291,7 +294,7 @@
             return this;
         },
 
-        attr: function (name, val) {
+        attr: (name, val) => {
             //Read or set DOM attributes. When no value is given, reads 
             //specified attribute from the first element in the collection. 
             //When value is given, sets the attribute to that value on each element 
@@ -319,12 +322,11 @@
             return this;
         },
 
-        before: function (content) {
+        before: (content) => {
             //Add content to the DOM before each element in the collection. 
             //The content can be an HTML string, a DOM node or an array of nodes.
             var obj = getObj(content);
             if (isArrayThen(obj, this.before) || obj == null) { return this; }
-
             insertContent(obj, this,
                 function (e) { e.insertAdjacentHTML('beforebegin', obj); },
                 function (e) { e.parentNode.insertBefore(obj, e); }
@@ -332,7 +334,7 @@
             return this;
         },
 
-        children: function (sel) {
+        children: (sel) => {
             //Get immediate children of each element in the current collection. 
             //If selector is given, filter the results to only include ones matching the CSS select.
             var elems = [];
@@ -363,12 +365,12 @@
             return clone(elems);
         },
 
-        closest: function (selector) {
+        closest: (selector) => {
             //Traverse upwards from the current element to find the first element that matches the select. 
             return this;
         },
 
-        css: function (params) {
+        css: (params) => {
             //Read or set CSS properties on DOM elements. When no value is given, 
             //returns the CSS property from the first element in the collection. 
             //When a value is given, sets the property to that value on each element of the collection.
@@ -383,9 +385,8 @@
                 for (var x in params) {
                     //if params is an object with key/value pairs, apply styling to elements\
                     haskeys = tru;
-                    var name = styleName(x);
                     this.each(function (e) {
-                        setStyle(e, name, params[x]);
+                        setStyle(e, x, params[x]);
                     });
                 }
                 if (haskeys) { return this; }
@@ -434,7 +435,7 @@
             return this;
         },
 
-        each: function (func) {
+        each: (func) => {
             //Iterate through every element of the collection. Inside the iterator function, 
             //this keyword refers to the current item  = function(also passed as the second argument to the function). 
             //If the iterator select.prototype.returns 0, iteration stops.
@@ -444,7 +445,7 @@
             return this;
         },
 
-        empty: function (func) {
+        empty: (func) => {
             //Clear DOM contents of each element in the collection.
             this.each(function (e) {
                 e.innerHTML = '';
@@ -452,7 +453,7 @@
             return this;
         },
 
-        eq: function (index) {
+        eq: (index) => {
             //Reduce the set of matched elements to the one at the specified index
             var elems = [];
             if (index > this.length - 1) {
@@ -471,7 +472,7 @@
             return clone(elems);
         },
 
-        filter: function (sel) {
+        filter: (sel) => {
             //Filter the collection to contain only items that match the CSS select. 
             //If a select.prototype.is given, return only elements for which the select.prototype.returns a truthy value. 
             var elems = [];
@@ -495,7 +496,7 @@
             return clone(elems);
         },
 
-        find: function (sel) {
+        find: (sel) => {
             //Find elements that match CSS selector executed in scope of nodes in the current collection.
             var elems = [];
             if (this.length > 0) {
@@ -512,7 +513,7 @@
             return clone(elems);
         },
 
-        first: function () {
+        first: () => {
             //the first element found in the selector
             var elems = [];
             if (this.length > 0) {
@@ -521,14 +522,14 @@
             return clone(elems);
         },
 
-        get: function (index) {
+        get: (index) => {
             //Get all elements or a single element from the current collection. 
             //When no index is given, returns all elements in an ordinary array. 
             //When index is specified, return only the element at that position. 
             return this[index || 0];
         },
 
-        has: function (selector) {
+        has: (selector) => {
             //Filter the current collection to include only elements that have 
             //any number of descendants that match a selector, or that contain a specific DOM node.
             var elems = [];
@@ -542,7 +543,7 @@
             return clone(elems);
         },
 
-        hasClass: function (classes) {
+        hasClass: (classes) => {
             //Check if any elements in the collection have the specified class.
             var classList;
             if (isType(classes, 5)) {
@@ -568,7 +569,7 @@
             return fals;
         },
 
-        height: function (val) {
+        height: (val) => {
             //Get the height of the first element in the collection; 
             //or set the height of all elements in the collection.
             //this function differs from jQuery as it doesn't care
@@ -622,7 +623,7 @@
             return this;
         },
 
-        hide: function () {
+        hide: () => {
             //Hide elements in this collection by setting their display CSS property to none.
             this.each(function (e) {
                 e.style.display = 'none';
@@ -630,7 +631,7 @@
             return this;
         },
 
-        hover: function () {
+        hover: () => {
             var args = normalizeArgs([
                 { t: 1, o: tru }, //0: selector = string
                 { t: 0, o: tru }, //1: data = anything
@@ -655,7 +656,7 @@
             });
         },
 
-        html: function (content) {
+        html: (content) => {
             //Get or set HTML contents of elements in the collection. 
             //When no content given, returns innerHTML of the first element. 
             //When content is given, use it to replace contents of each element. 
@@ -677,7 +678,7 @@
         /**
          * @suppress {checkTypes}
          */
-        index: function (e) {
+        index: (e) => {
             //Get the position of an element. When no element is given, 
             //returns position of the current element among its siblings. 
             //When an element is given, returns its position in the current collection. 
@@ -704,7 +705,7 @@
             return i;
         },
 
-        innerHeight: function (height) {
+        innerHeight: (height) => {
             //Get the current computed inner height (including padding but not border) for the 
             //first element in the set of matched elements or set the inner height of every matched element
             var obj = getObj(height);
@@ -725,7 +726,7 @@
             }
         },
 
-        innerWidth: function (width) {
+        innerWidth: (width) => {
             //Get the current computed inner width (including padding but not border) for the 
             //first element in the set of matched elements or set the inner width of every matched element
             var obj = getObj(width);
@@ -746,7 +747,7 @@
             }
         },
 
-        is: function (selector) {
+        is: (selector) => {
             //Check if all the elements of the current collection matches the CSS select.
             if (this.length > 0) {
                 var self = this;
@@ -771,28 +772,28 @@
             return fals;
         },
 
-        last: function () {
+        last: () => {
             //Get the last element of the current collection.
             var elems = [];
             if (this.length > 0) {
                 elems = [this[this.length - 1]];
+                console.log(["elems", elems]);
             }
             return clone(elems);
         },
 
-        map: function (func) { //func(index, element)        
+        map: (func) => { //func(index, element)        
             //Iterate through every element of the collection. Inside the iterator function, 
             //this keyword refers to the current item  = function(also passed as the second argument to the function). 
             //If the iterator select.prototype.returns 0, iteration stops.
+            var mapped = [];
             for (var x = 0; x < this.length; x++) {
-                if (func(x, this[x]) == fals) {
-                    break;
-                }
+                mapped.push(func(x, this[x])); 
             }
-            return this;
+            return mapped;
         },
 
-        next: function (selector) {
+        next: (selector) => {
             //Get the next sibling optionally filtered by selector of each element in the collection.
             var elems = [];
             if (selector) {
@@ -814,7 +815,7 @@
             return clone(elems);
         },
 
-        not: function (selector) {
+        not: (selector) => {
             //Filter the current collection to get a new collection of elements that don't match the CSS select. 
             //If another collection is given instead of selector, return only elements not present in it. 
             //If a select.prototype.is given, return only elements for which the select.prototype.returns a falsy value. 
@@ -834,7 +835,7 @@
             return clone(diffArray(elems, q));
         },
 
-        off: function (event, func) {
+        off: (event, func) => {
             //remove an event handler
             var args = normalizeArgs([
                 { t: 1, o: fals }, //0: event = string
@@ -908,7 +909,7 @@
             return this;
         },
 
-        offset: function (coordinates) {
+        offset: (coordinates) => {
             //Get position of the element in the document. 
             //Returns an object with properties: top, left, width and height.
 
@@ -924,7 +925,7 @@
             return { top: 0, left: 0 };
         },
 
-        offsetParent: function () {
+        offsetParent: () => {
             //Find the first ancestor element that is positioned, 
             //meaning its CSS position value is "relative", "absolute"" or "fixed".
             if (this.length > 0) {
@@ -933,7 +934,7 @@
             return null;
         },
 
-        on: function () {
+        on: () => {
             //Attach an event handler function for one or more events to the selected elements.
             var args = normalizeArgs([
                 { t: 1, o: fals }, //0: event = string
@@ -991,26 +992,25 @@
                     });
                 }
             }
-
             return this;
         },
 
         //TODO: one
-        one: function (event, func) {
+        one: (event, func) => {
             //Attach a handler to an event for the elements. The handler is executed at most once per element per event type
         },
 
         //TODO: outerHeight
-        outerHeight: function () {
+        outerHeight: () => {
 
         },
 
         //TODO: outerWidth
-        outerWidth: function () {
+        outerWidth: () => {
 
         },
 
-        parent: function (selector) {
+        parent: (selector) => {
             //Get immediate parents of each element in the collection. 
             //If CSS selector is given, filter results to include only ones matching the select.
             var elems = [];
@@ -1030,7 +1030,7 @@
             return clone(elems);
         },
 
-        parents: function (selector) {
+        parents: (selector) => {
             //Get all ancestors of each element in the selector. 
             //If CSS selector is given, filter results to include only ones matching the select.
             var elems = [];
@@ -1062,7 +1062,7 @@
             return clone(elems);
         },
 
-        position: function () {
+        position: () => {
             //Get the position of the first element in the collection, relative to the offsetParent. 
             //This information is useful when absolutely positioning an element to appear aligned with another.
             if (this.length > 0) {
@@ -1071,7 +1071,7 @@
             return { left: 0, top: 0 };
         },
 
-        prepend: function (content) {
+        prepend: (content) => {
             //Prepend content to the DOM inside each element in the collection. 
             //The content can be an HTML string, a DOM node or an array of nodes.
             var obj = getObj(content);
@@ -1085,7 +1085,7 @@
             return this;
         },
 
-        prev: function (selector) {
+        prev: (selector) => {
             //Get the previous sibling optionally filtered by selector of each element in the collection.
             var elems = [];
             this.each(function (e) {
@@ -1104,7 +1104,7 @@
             return clone(elems);
         },
 
-        prop: function (name, val) {
+        prop: (name, val) => {
             //Read or set properties of DOM elements. This should be preferred over attr in case of 
             //reading values of properties that change with user interaction over time, such as checked and selected.
             var n = getObj(name);
@@ -1279,12 +1279,12 @@
             return this;
         },
 
-        push: function (elems) {
+        push: (elems) => {
             [].push.apply(this, elems);
             return this;
         },
 
-        ready: function (callback) {
+        ready: (callback) => {
             if (this.length == 1) {
                 if (this[0] == document) {
                     if (document.readyState != 'loading') {
@@ -1296,7 +1296,7 @@
             }
         },
 
-        remove: function (selector) {
+        remove: (selector) => {
             //Remove the set of matched elements from the DOM
             this.each(function (e) {
                 e.parentNode.removeChild(e);
@@ -1305,7 +1305,7 @@
             return this;
         },
 
-        removeAttr: function (attr) {
+        removeAttr: (attr) => {
             //Remove an attribute from each element in the set of matched elements
             var obj = getObj(attr);
             if (isType(obj, 5)) {
@@ -1323,7 +1323,7 @@
             return this;
         },
 
-        removeClass: function (className) {
+        removeClass: (className) => {
             //Remove a single class, multiple classes, or all classes from each element in the set of matched elements
             var obj = getObj(className);
             if (typeof obj == 'string') {
@@ -1334,15 +1334,15 @@
                 }
             }
             if (isType(obj, 5)) {
-                this.each(function (e) {
-                    obj.forEach(function (a) {
+                this.each((e) => {
+                    obj.forEach((a) => {
                         if (e.className) {
-                            e.className = e.className.split(' ').filter(function (b) { return b != '' && b != a; }).join(' ');
+                            e.className = e.className.split(' ').filter((b) => { return b != '' && b != a; }).join(' ');
                         }
                     });
                 });
             } else if (typeof obj == 'string') {
-                this.each(function (e) {
+                this.each((e) => {
                     if (e.className) {
                         e.className = e.className.split(' ').filter(function (b) { return b != '' && b != obj; }).join(' ');
                     }
@@ -1351,13 +1351,13 @@
             return this;
         },
 
-        removeProp: function (name) {
+        removeProp: (name) => {
             //Remove a property for the set of matched elements
             this.prop(name, '--');
             return this;
         },
 
-        serialize: function () {
+        serialize: () => {
             if (this.length == 0) { return ''; }
             var form = this[0];
             if (!form || form.nodeName !== "FORM") {
@@ -1420,7 +1420,7 @@
             return q.join("&");
         },
 
-        show: function () {
+        show: () => {
             //Display the matched elements
             this.removeClass('hide');
             this.each(function (e) {
@@ -1429,7 +1429,7 @@
             return this;
         },
 
-        siblings: function (selector) {
+        siblings: (selector) => {
             //Get the siblings of each element in the set of matched elements, optionally filtered by a selector
             var elems = [];
             var sibs = [];
@@ -1478,18 +1478,17 @@
             return clone(elems);
         },
 
-        //TODO: slice
-        slice: function () {
+        slice: () => {
             //Reduce the set of matched elements to a subset specified by a range of indices
             [].slice.apply(this, arguments);
             return this;
         },
 
-        splice: function () {
+        splice: () => {
             [].splice.apply(this, arguments);
         },
 
-        stop: function () {
+        stop: () => {
             if (typeof (Velocity) != 'undefined') {
                 Velocity(this, "stop");
             }
@@ -1497,12 +1496,12 @@
         },
 
         //TODO: text
-        text: function () {
+        text: () => {
             //Get the combined text contents of each element in the set of matched elements, including their descendants, or set the text contents of the matched elements
             return '';
         },
 
-        toggle: function () {
+        toggle: () => {
             //Display or hide the matched elements
             this.each(function (e) {
                 if (e.style.display == 'none') {
@@ -1512,7 +1511,7 @@
             return this;
         },
 
-        toggleClass: function (className) {
+        toggleClass: (className) => {
             //Add or remove one or more classes from each element in the set of matched elements, depending on either the class' presence or the value of the state argument
             var obj = getObj(className);
             if (typeof obj == 'string') {
@@ -1544,7 +1543,7 @@
             }
         },
 
-        val: function (value) {
+        val: (value) => {
             //Get the current value of the first element in the set of matched elements or set the value of every matched element
             if (value != null) {
                 this.each(function (a) {
@@ -1559,7 +1558,7 @@
             return this;
         },
 
-        width: function (val) {
+        width: (val) => {
             //Get the current computed width for the first element in the set of matched elements or set the width of every matched element
             var obj = getObj(val);
             if (isType(obj, 1)) {
@@ -1609,19 +1608,19 @@
         },
 
         //TODO: wrap
-        wrap: function (elem) {
+        wrap: (elem) => {
             //Wrap an HTML structure around each element in the set of matched elements
             return this;
         },
 
         //TODO: wrapAll
-        wrapAll: function (elem) {
+        wrapAll: (elem) => {
             //Wrap an HTML structure around all elements in the set of matched elements
             return this;
         },
 
         //TODO: wrapInner
-        wrapInner: function (elem) {
+        wrapInner: (elem) => {
             //Wrap an HTML structure around the content of each element in the set of matched elements
             return this;
         }
@@ -1631,7 +1630,7 @@
     // create public selector object //////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /** @noalias */
-    window['$'] = function(selector) {
+    window['$'] = (selector) => {
         return new select(selector);
     }
 
@@ -1639,7 +1638,7 @@
     // add functionality to the $ object //////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /** @noalias */
-    window['$'].ajax = function () {
+    window['$'].ajax = () => {
         var args = normalizeArgs([
             { t: 1, o: tru }, //0: url = string (optional)
             { t: 4, o: tru }, //1: settings = object (optional)
@@ -1701,7 +1700,7 @@
     /**
      * @param {...string|boolean} var_args
      */
-    window['$'].extend = function (var_args) {
+    window['$'].extend = (var_args) => {
         var extended = {};
         var deep = fals;
         var i = 0;
