@@ -8,7 +8,7 @@
     const tru = true;
     const fals = false;
     const doc = document;
-    var pxStyles = ['top', 'right', 'bottom', 'left', 'width', 'height', 'maxWidth', 'maxHeight', 'fontSize'],
+    var pxStyles = ['top', 'right', 'bottom', 'left', 'width', 'height', 'minWidth', 'minHeight', 'maxWidth', 'maxHeight', 'fontSize'],
         pxStylesPrefix = ['border', 'padding', 'margin'],
         pxStylesSuffix = ['Top', 'Right', 'Bottom', 'Left'],
         listeners = []; //used for capturing event listeners from $('').on 
@@ -777,7 +777,6 @@
             var elems = [];
             if (this.length > 0) {
                 elems = [this[this.length - 1]];
-                console.log(["elems", elems]);
             }
             return clone(elems);
         },
