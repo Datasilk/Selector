@@ -802,13 +802,49 @@
                     var n = e.nextSibling; if (n) { while (n.nodeName == '#text') { n = n.nextSibling; if (!n) { break; } } }
                     if (n) {
                         if (q.some(function (s) { return s == n; })) { elems.push(n); }
-                    } else { elems.push(e); }
+                    }
                 });
             } else {
                 //no selector
                 this.each(function (e) {
                     var n = e.nextSibling; if (n) { while (n.nodeName == '#text') { n = n.nextSibling; if (!n) { break; } } }
-                    if (n) { elems.push(n); } else { elems.push(e); }
+                    if (n) { elems.push(n); }
+                });
+            }
+            return clone(elems);
+        },
+
+        nextAll: function (selector) {
+            //Get all siblings below current sibling optionally filtered by selector of each element in the collection.
+            var elems = [];
+            if (selector) {
+                //use selector
+                this.each(function (e) {
+                    var q = query(e, selector);
+                    var n = e.nextSibling;
+                    while (n) {
+                        while (n.nodeName == '#text') {
+                            n = n.nextSibling;
+                            if (!n) { break; }
+                        }
+                        if (!n) { break; }
+                        if (q.some(function (s) { return s == n; })) { elems.push(n); }
+                        n = n.nextSibling;
+                    }
+                });
+            } else {
+                //no selector
+                this.each(function (e) {
+                    var n = e.nextSibling;
+                    while (n) {
+                        while (n.nodeName == '#text') {
+                            n = n.nextSibling;
+                            if (!n) { break; }
+                        }
+                        if (!n) { break; }
+                        elems.push(n);
+                        n = n.nextSibling;
+                    }
                 });
             }
             return clone(elems);
