@@ -8,7 +8,7 @@
     const tru = true;
     const fals = false;
     const doc = document;
-    var pxStyles = ['top', 'right', 'bottom', 'left', 'width', 'height', 'maxWidth', 'maxHeight', 'fontSize'],
+    var pxStyles = ['top', 'right', 'bottom', 'left', 'width', 'height', 'minWidth', 'minHeight', 'maxWidth', 'maxHeight', 'fontSize'],
         pxStylesPrefix = ['border', 'padding', 'margin'],
         pxStylesSuffix = ['Top', 'Right', 'Bottom', 'Left'],
         listeners = []; //used for capturing event listeners from $('').on 
@@ -195,14 +195,17 @@
 
     function insertContent(obj, elements, stringFunc, objFunc) {
         //checks type of object and execute callback functions depending on object type
-        var type = isType(obj,1);
-        for (var x = 0; x < elements.length; x++) {
-            if (type) {
+        var type = isType(obj, 1);
+        if (type == tru) {
+            for (var x = 0; x < elements.length; x++) {
                 stringFunc(elements[x]);
-            } else {
-                objFunc(elements[x]); 
+            }
+        } else {
+            for (var x = 0; x < elements.length; x++) {
+                objFunc(elements[x]);
             }
         }
+        
         return this;
     }
 
@@ -324,7 +327,6 @@
             //The content can be an HTML string, a DOM node or an array of nodes.
             var obj = getObj(content);
             if (isArrayThen(obj, this.before) || obj == null) { return this; }
-
             insertContent(obj, this,
                 function (e) { e.insertAdjacentHTML('beforebegin', obj); },
                 function (e) { e.parentNode.insertBefore(obj, e); }
@@ -383,9 +385,8 @@
                 for (var x in params) {
                     //if params is an object with key/value pairs, apply styling to elements\
                     haskeys = tru;
-                    var name = styleName(x);
                     this.each(function (e) {
-                        setStyle(e, name, params[x]);
+                        setStyle(e, x, params[x]);
                     });
                 }
                 if (haskeys) { return this; }
@@ -784,12 +785,11 @@
             //Iterate through every element of the collection. Inside the iterator function, 
             //this keyword refers to the current item  = function(also passed as the second argument to the function). 
             //If the iterator select.prototype.returns 0, iteration stops.
+            var mapped = [];
             for (var x = 0; x < this.length; x++) {
-                if (func(x, this[x]) == fals) {
-                    break;
-                }
+                mapped.push(func(x, this[x])); 
             }
-            return this;
+            return mapped;
         },
 
         next: function (selector) {
@@ -802,13 +802,49 @@
                     var n = e.nextSibling; if (n) { while (n.nodeName == '#text') { n = n.nextSibling; if (!n) { break; } } }
                     if (n) {
                         if (q.some(function (s) { return s == n; })) { elems.push(n); }
-                    } else { elems.push(e); }
+                    }
                 });
             } else {
                 //no selector
                 this.each(function (e) {
                     var n = e.nextSibling; if (n) { while (n.nodeName == '#text') { n = n.nextSibling; if (!n) { break; } } }
-                    if (n) { elems.push(n); } else { elems.push(e); }
+                    if (n) { elems.push(n); }
+                });
+            }
+            return clone(elems);
+        },
+
+        nextAll: function (selector) {
+            //Get all siblings below current sibling optionally filtered by selector of each element in the collection.
+            var elems = [];
+            if (selector) {
+                //use selector
+                this.each(function (e) {
+                    var q = query(e, selector);
+                    var n = e.nextSibling;
+                    while (n) {
+                        while (n.nodeName == '#text') {
+                            n = n.nextSibling;
+                            if (!n) { break; }
+                        }
+                        if (!n) { break; }
+                        if (q.some(function (s) { return s == n; })) { elems.push(n); }
+                        n = n.nextSibling;
+                    }
+                });
+            } else {
+                //no selector
+                this.each(function (e) {
+                    var n = e.nextSibling;
+                    while (n) {
+                        while (n.nodeName == '#text') {
+                            n = n.nextSibling;
+                            if (!n) { break; }
+                        }
+                        if (!n) { break; }
+                        elems.push(n);
+                        n = n.nextSibling;
+                    }
                 });
             }
             return clone(elems);
@@ -991,7 +1027,6 @@
                     });
                 }
             }
-
             return this;
         },
 

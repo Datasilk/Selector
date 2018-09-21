@@ -47,6 +47,7 @@ The aim of this project is to build a library that can be used to replace jQuery
 * last
 * map
 * next
+* nextAll
 * not
 * off
 * offset
