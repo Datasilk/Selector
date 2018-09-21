@@ -100,10 +100,10 @@
         return getComputedStyle(e).getPropertyValue(name);
     }
 
-    function setStyle(e, name, val) {
+    function setStyle(e, n, val) {
         //properly set a style for an element
         if (e.nodeName == '#text') { return; }
-        var v = val, n = styleName(name);
+        var v = val;
         
         //check for empty value
         if (v == '' || v == null) { e.style[n] = v == '' ? null : v; return; }
