@@ -941,11 +941,11 @@
             if (this.length > 0) {
                 const box = this[0].getBoundingClientRect();
                 return {
-                    top: box.top + document.body.scrollTop,
-                    left: box.left + document.body.scrollLeft
+                    left: box.left + document.body.scrollLeft,
+                    top: box.top + document.body.scrollTop
                 };
             }
-            return { top: 0, left: 0 };
+            return { left: 0, top: 0 };
         },
 
         offsetParent: function () {
