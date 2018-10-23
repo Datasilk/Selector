@@ -1057,7 +1057,7 @@
             //If CSS selector is given, filter results to include only ones matching the select.
             let elems = [];
             this.each(function (e) {
-                const el = e.parentNode;
+                let el = e.parentNode;
                 while (el) {
                     if (selector == null || selector == '') {
                         if (elems.indexOf(el) < 0) {
