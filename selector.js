@@ -1705,10 +1705,8 @@
     function runAjaxQueue() {
         //run next request in the queue
         if (ajaxWait == true) { return; }
+        if (ajaxQueue.length == 0) { return; }
         ajaxWait = true;
-        if (ajaxQueue.length == 0) {
-            return;
-        }
         let queue = ajaxQueue[ajaxQueue.length - 1];
         let req = queue.req;
         let opt = queue.opt;
