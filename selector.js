@@ -16,6 +16,8 @@
     const classMatch = /^\.[\w-]*$/,
           singlet = /^\w+$/;
 
+    let ajaxQueue = [];
+    let ajaxWait = false;
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Internal functions //////////////////////////////////////////////////////////////////////////////////////////////
@@ -1645,18 +1647,18 @@
             { t: 4, o: tru }, //1: settings = object (optional)
         ], arguments);
         args[1] = getObj(args[1]);
-        let opt = args[1] || { url: args[0] };
+        var opt = args[1] || { url: args[0] };
         opt.url = args[0] || opt.url;
         opt.async = opt.async || tru;
-        opt.cache = opt.cache || fals; 
-        opt.contentType = opt.contentType || 'application/x-www-form-urlencoded; charset=UTF-8'; 
+        opt.cache = opt.cache || fals;
+        opt.contentType = opt.contentType || 'application/x-www-form-urlencoded; charset=UTF-8';
         opt.data = opt.data || '';
-        opt.dataType = opt.dataType || ''; 
+        opt.dataType = opt.dataType || '';
         opt.method = opt.method || "GET";
         opt.type = opt.method || opt.type;
 
         //set up AJAX request
-        let req = new XMLHttpRequest();
+        var req = new XMLHttpRequest();
 
         //set up callbacks
         req.onload = function () {
@@ -1675,6 +1677,8 @@
                     opt.error(req, req.statusText);
                 }
             }
+            ajaxWait = false;
+            runAjaxQueue();
         };
 
         req.onerror = function () {
@@ -1682,6 +1686,8 @@
             if (opt.error) {
                 opt.error(req, req.statusText);
             }
+            ajaxWait = false;
+            runAjaxQueue();
         };
 
         if (opt.beforeSend) {
@@ -1691,7 +1697,26 @@
             }
         }
 
-        //finally, send AJAX request
+        //finally, add AJAX request to queue
+        ajaxQueue.unshift({ req: req, opt: opt });
+        runAjaxQueue();
+    }
+
+    function runAjaxQueue() {
+        //run next request in the queue
+        if (ajaxWait == true) { return; }
+        ajaxWait = true;
+        if (ajaxQueue.length == 0) {
+            return;
+        }
+        let queue = ajaxQueue[ajaxQueue.length - 1];
+        let req = queue.req;
+        let opt = queue.opt;
+
+        //remove from queue
+        ajaxQueue.pop();
+
+        //run AJAX request from queue
         req.open(opt.method, opt.url, opt.async, opt.username, opt.password);
         req.setRequestHeader('Content-Type', opt.contentType);
         req.send(opt.data);
