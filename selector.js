@@ -104,7 +104,7 @@
 
     function getObj(obj) {
         //get a string from object (either string, number, or function)
-        if (!obj) { return obj; }
+        if (!obj) { return null; }
         if (isType(obj, 5)) {
             //handle object as array
             return obj[0];
@@ -1168,6 +1168,35 @@
                 }
             };
 
+            const execProp = function (a) {
+                if (v != null) {
+                    if (v == '--') {
+                        //remove
+                        this.each(function (e) {
+                            if (e[a]) { delete e[a]; }
+                        });
+                    } else {
+                        //set
+                        v = v == 0 ? fals : tru;
+                        this.each(function (e) {
+                            e[a] = v;
+                        });
+                    }
+
+                } else {
+                    //get
+                    if (this.length > 0) {
+                        let e = this[0];
+                        let b = e[a];
+                        if (b == null) {
+                            b = e.getAttribute(a) != null ? tru : fals;
+                            e[a] = b;
+                        }
+                        return b;
+                    }
+                }
+            };
+
             //get, set, or remove (if val == '--') a specific property from element(s)
             let nn = '';
             switch (n) {
@@ -1182,37 +1211,6 @@
                     nn = 'disabled';
                 case "disabled":
                     //get/set/remove boolean property that belongs to the DOM element object or is an attribute (default)
-
-
-                    const execProp = function (a) {
-                        if (v != null) {
-                            if (v == '--') {
-                                //remove
-                                this.each(function (e) {
-                                    if (e[a]) { delete e[a]; }
-                                });
-                            } else {
-                                //set
-                                v = v == 0 ? fals : tru;
-                                this.each(function (e) {
-                                    e[a] = v;
-                                });
-                            }
-
-                        } else {
-                            //get
-                            if (this.length > 0) {
-                                let e = this[0];
-                                let b = e[a];
-                                if (b == null) {
-                                    b = e.getAttribute(a) != null ? tru : fals;
-                                    e[a] = b;
-                                }
-                                return b;
-                            }
-                        }
-                    };
-
                     if (nn != '') {
                         //get/set/remove default property
                         const a = execAttr.call(this, nn, nn);
@@ -1267,7 +1265,7 @@
                     // last resort to get/set/remove property value from style or attribute
                     //first, try getting a style
                     let a = execProp.call(this, n);
-                    if (a != null) {
+                    if (a != null && typeof a != 'undefined') {
                         return a;
                     } else {
                         //next, try getting a attribute
