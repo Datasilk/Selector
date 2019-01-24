@@ -478,9 +478,9 @@
             var elems = [];
             if (isType(sel, 6)) {
                 //filter a boolean function
-                this.each(function (e) {
-                    if (sel.call(e, e) == tru) { elems.push(e); }
-                });
+                for (let i = 0; i < this.length; i++) {
+                    if (sel.call(this[i], i, this[i]) == tru) { elems.push(this[i]); }
+                }
             } else {
                 //filter selector string
                 var found = query(document, sel);
