@@ -775,33 +775,31 @@
         next: function (selector) {
             //Get the next sibling optionally filtered by selector of each element in the collection.
             let elems = [];
-            if (selector) {
-                //use selector
-                this.each(function (e) {
-                    const q = query(e, selector);
-                    let n = e.nextSibling; 
-                    if (n) { while (n.nodeName == '#text') { 
-                        n = n.nextSibling; 
-                            if (!n) { break; } 
-                        } 
+            this.each(function (e) {
+                let el = e.nextSibling;
+                if (select && el) {
+                    //use selector
+                    const q = query(e.parentNode, selector);
+                    while (el != null) {
+                        if (el.nodeName != '#text') {
+                            if (q.some(function (s) { return s == el })) {
+                                elems.push(el);
+                                break;
+                            }
+                        }
+                        el = el.nextSibling;
                     }
-                    if (n) {
-                        if (q.some(function (s) { return s == n; })) { elems.push(n); }
+                } else if (el) {
+                    //no selector
+                    while (el != null) {
+                        if (el.nodeName != '#text') {
+                            elems.push(el);
+                            break;
+                        }
+                        el = el.nextSibling;
                     }
-                });
-            } else {
-                //no selector
-                this.each(function (e) {
-                    let n = e.nextSibling; 
-                    if (n) { 
-                        while (n.nodeName == '#text') { 
-                            n = n.nextSibling; 
-                            if (!n) { break; } 
-                        } 
-                    }
-                    if (n) { elems.push(n); }
-                });
-            }
+                }
+            });
             return clone(elems);
         },
 
@@ -1113,16 +1111,28 @@
             //Get the previous sibling optionally filtered by selector of each element in the collection.
             let elems = [];
             this.each(function (e) {
-                const p = e.previousSibling;
-                if (selector) {
+                let el = e.previousSibling;
+                if (select && el) {
                     //use selector
                     const q = query(e.parentNode, selector);
-                    if (q.some(function (s) { return s == p })) {
-                        elems.push(p ? p : e);
+                    while (el != null) {
+                        if (el.nodeName != '#text') {
+                            if (q.some(function (s) { return s == el })) {
+                                elems.push(el);
+                                break;
+                            }
+                        }
+                        el = el.previousSibling;
                     }
-                } else {
+                } else if (el) {
                     //no selector
-                    elems.push(p ? p : e);
+                    while (el != null) {
+                        if (el.nodeName != '#text') {
+                            elems.push(el);
+                            break;
+                        }
+                        el = el.previousSibling;
+                    }
                 }
             });
             return clone(elems);
