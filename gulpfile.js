@@ -3,7 +3,9 @@
 //includes
 var gulp = require('gulp'),
     concat = require('gulp-concat'),
-    uglify = require('gulp-uglify')
+    uglifyes = require('uglify-es'),
+    composer = require('gulp-uglify/composer'),
+    uglify = composer(uglifyes, console)
 
 //tasks
 gulp.task('selector', function () {
@@ -19,8 +21,8 @@ gulp.task('selector-min', function () {
         .pipe(gulp.dest('.', { overwrite: true }));
 });
 
-gulp.task('compile', ['selector', 'selector-min']);
+gulp.task('compile', gulp.series('selector', 'selector-min'));
 
 gulp.task('watch', function(){
-    gulp.watch('selector.js', ['compile']);
+    gulp.watch('selector.js', gulp.series('compile'));
 });
