@@ -1212,24 +1212,20 @@
             switch (n) {
                 case "defaultChecked":
                     nn = 'checked';
+                    break;
                 case "checked":
                     if (!v) { if (this.length > 0) { return this[0].checked; } }
+                    break;
                 case "defaultSelected":
                     nn = 'selected';
+                    break;
                 case "selected":
+                    break;
                 case "defaultDisabled":
                     nn = 'disabled';
+                    break;
                 case "disabled":
                     //get/set/remove boolean property that belongs to the DOM element object or is an attribute (default)
-                    if (nn != '') {
-                        //get/set/remove default property
-                        const a = execAttr.call(this, nn, nn);
-                        if (a != null) { return a; }
-                    } else {
-                        //get/set/remove property
-                        const a = execProp.call(this, n);
-                        if (a != null) { return a; }
-                    }
                     break;
 
                 case "selectedIndex":
@@ -1243,11 +1239,13 @@
                         }
                     }
                     break;
+                    return;
 
                 case "nodeName":
                     if (val != null) {
                         //set node name
                         //TODO: replace DOM element with new element of new node name, cloning all attributes & appending all children elements
+                        return;
                     } else {
                         //get node name
                         if (this.length > 0) {
@@ -1261,6 +1259,7 @@
                     if (val != null) {
                         //set node name
                         //TODO: replace DOM element with new element of new tag name, cloning all attributes & appending all children elements
+                        return;
                     } else {
                         //get tag name
                         if (this.length > 0) {
@@ -1284,8 +1283,19 @@
                             return a;
                         }
                     }
-
+                    break;
             }
+            console.log([nn, n]);
+            if (nn != '') {
+                //get/set/remove default property
+                const a = execAttr.call(this, nn, nn);
+                if (a != null) { return a; }
+            } else {
+                //get/set/remove property
+                const a = execProp.call(this, n);
+                if (a != null) { return a; }
+            }
+
             return this;
         },
 
