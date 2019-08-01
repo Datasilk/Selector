@@ -104,12 +104,16 @@
 
     function getObj(obj) {
         //get a string from object (either string, number, or function)
-        if (!obj) { return null; }
+        if (obj == null) { return null; }
+        if (isType(obj, 1)) {
+            //handle object as string
+            return obj;
+        }
         if (isType(obj, 5)) {
             //handle object as array
             return obj[0];
         }
-        else if (isType(obj, 6)) {
+        if (isType(obj, 6)) {
             //handle object as function (get value from object function execution)
             return getObj(obj());
         }
@@ -134,14 +138,16 @@
     }
 
     function isType(obj, type) {
-        switch (type) {
-            case 0: return tru; //anything
-            case 1: return typeof (obj) == 'string'; //string
-            case 2: return typeof (obj) == 'boolean'; //boolean
-            case 3: return !isNaN(parseFloat(obj)) && isFinite(obj); //number
-            case 4: return typeof (obj) == 'object'; //object
-            case 5: return typeof obj.splice === 'function'; //array
-            case 6: return typeof obj == 'function'; //function
+        if(obj != null){
+            switch (type) {
+                case 0: return tru; //anything
+                case 1: return typeof (obj) == 'string'; //string
+                case 2: return typeof (obj) == 'boolean'; //boolean
+                case 3: return !isNaN(parseFloat(obj)) && isFinite(obj); //number
+                case 4: return typeof (obj) == 'object'; //object
+                case 5: return typeof obj.splice === 'function'; //array
+                case 6: return typeof obj == 'function'; //function
+            }
         }
         return fals;
     }
