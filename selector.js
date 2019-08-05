@@ -1551,7 +1551,8 @@
                     if (c != null && c != '') {
                         c = c.split(' ');
                         //array of class names
-                        obj.forEach(function (a) {
+                        for (var x = 0; x < obj.length; x++) {
+                            var a = obj[x];
                             b = c.indexOf(a);
                             if (b >= 0) {
                                 //remove class
@@ -1560,7 +1561,7 @@
                                 //add class
                                 c.push(a);
                             }
-                        });
+                        }
                         //update element className attr
                         e.className = c.join(' ');
                     } else {
