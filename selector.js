@@ -1291,7 +1291,6 @@
                     }
                     break;
             }
-            console.log([nn, n]);
             if (nn != '') {
                 //get/set/remove default property
                 const a = execAttr.call(this, nn, nn);
