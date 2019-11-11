@@ -783,7 +783,7 @@
             let elems = [];
             this.each(function (e) {
                 let el = e.nextSibling;
-                if (select && el) {
+                if (selector && el) {
                     //use selector
                     const q = query(e.parentNode, selector);
                     while (el != null) {
