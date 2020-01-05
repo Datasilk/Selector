@@ -1118,7 +1118,7 @@
             let elems = [];
             this.each(function (e) {
                 let el = e.previousSibling;
-                if (select && el) {
+                if (selector && el) {
                     //use selector
                     const q = query(e.parentNode, selector);
                     while (el != null) {
