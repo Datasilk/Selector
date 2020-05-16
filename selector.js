@@ -1695,6 +1695,9 @@
                 if (opt.success) {
                     opt.success(resp, req.statusText, req);
                 }
+                if (opt.complete) {
+                    opt.complete(resp, req.statusText, req);
+                }
             } else {
                 //connected to server, but returned an error
                 if (opt.error) {
