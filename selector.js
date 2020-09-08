@@ -1189,13 +1189,13 @@
                     if (v == '--') {
                         //remove
                         this.each(function (e) {
-                            if (e[a]) { delete e[a]; }
+                            e.style.removeProperty(a);
                         });
                     } else {
                         //set
                         v = v == 0 ? fals : tru;
                         this.each(function (e) {
-                            e[a] = v;
+                            e.style.setProperty(a, v);
                         });
                     }
 
