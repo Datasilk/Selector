@@ -1729,6 +1729,10 @@
         runAjaxQueue();
     }
 
+    window['$'].getJSON = function (url, complete, error) {
+        $.ajax(url, { dataType:'json', complete: complete, error: error });
+    }
+
     function runAjaxQueue() {
         //run next request in the queue
         if (ajaxWait == true) { return; }
