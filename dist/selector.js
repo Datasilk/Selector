@@ -632,9 +632,10 @@
                     entered = tru;
                 }
             });
+            var that = this;
             this.on('mouseleave', args[0], args[1], function (e) {
                 let p = e, f = fals;
-                while (p != null) { if (p == elem) { f = tru; break; } p = p.parentNode; }
+                while (p != null) { if (that.filter(a => a == p).length > 0) { f = tru; break; } p = p.parentNode; }
                 if (!f) {
                     entered = fals;
                     if (args[3]) { args[3](e); }
@@ -783,7 +784,7 @@
             let elems = [];
             this.each(function (e) {
                 let el = e.nextSibling;
-                if (select && el) {
+                if (selector && el) {
                     //use selector
                     const q = query(e.parentNode, selector);
                     while (el != null) {
@@ -1118,7 +1119,7 @@
             let elems = [];
             this.each(function (e) {
                 let el = e.previousSibling;
-                if (select && el) {
+                if (selector && el) {
                     //use selector
                     const q = query(e.parentNode, selector);
                     while (el != null) {
@@ -1189,13 +1190,13 @@
                     if (v == '--') {
                         //remove
                         this.each(function (e) {
-                            if (e[a]) { delete e[a]; }
+                            e.style.removeProperty(a);
                         });
                     } else {
                         //set
                         v = v == 0 ? fals : tru;
                         this.each(function (e) {
-                            e[a] = v;
+                            e.style.setProperty(a, v);
                         });
                     }
 
@@ -1218,24 +1219,20 @@
             switch (n) {
                 case "defaultChecked":
                     nn = 'checked';
+                    break;
                 case "checked":
                     if (!v) { if (this.length > 0) { return this[0].checked; } }
+                    break;
                 case "defaultSelected":
                     nn = 'selected';
+                    break;
                 case "selected":
+                    break;
                 case "defaultDisabled":
                     nn = 'disabled';
+                    break;
                 case "disabled":
                     //get/set/remove boolean property that belongs to the DOM element object or is an attribute (default)
-                    if (nn != '') {
-                        //get/set/remove default property
-                        const a = execAttr.call(this, nn, nn);
-                        if (a != null) { return a; }
-                    } else {
-                        //get/set/remove property
-                        const a = execProp.call(this, n);
-                        if (a != null) { return a; }
-                    }
                     break;
 
                 case "selectedIndex":
@@ -1249,11 +1246,13 @@
                         }
                     }
                     break;
+                    return;
 
                 case "nodeName":
                     if (val != null) {
                         //set node name
                         //TODO: replace DOM element with new element of new node name, cloning all attributes & appending all children elements
+                        return;
                     } else {
                         //get node name
                         if (this.length > 0) {
@@ -1267,6 +1266,7 @@
                     if (val != null) {
                         //set node name
                         //TODO: replace DOM element with new element of new tag name, cloning all attributes & appending all children elements
+                        return;
                     } else {
                         //get tag name
                         if (this.length > 0) {
@@ -1290,8 +1290,18 @@
                             return a;
                         }
                     }
-
+                    break;
             }
+            if (nn != '') {
+                //get/set/remove default property
+                const a = execAttr.call(this, nn, nn);
+                if (a != null) { return a; }
+            } else {
+                //get/set/remove property
+                const a = execProp.call(this, n);
+                if (a != null) { return a; }
+            }
+
             return this;
         },
 
@@ -1541,7 +1551,8 @@
                     if (c != null && c != '') {
                         c = c.split(' ');
                         //array of class names
-                        obj.forEach(function (a) {
+                        for (var x = 0; x < obj.length; x++) {
+                            var a = obj[x];
                             b = c.indexOf(a);
                             if (b >= 0) {
                                 //remove class
@@ -1550,7 +1561,7 @@
                                 //add class
                                 c.push(a);
                             }
-                        });
+                        }
                         //update element className attr
                         e.className = c.join(' ');
                     } else {
@@ -1685,6 +1696,9 @@
                 if (opt.success) {
                     opt.success(resp, req.statusText, req);
                 }
+                if (opt.complete) {
+                    opt.complete(resp, req.statusText, req);
+                }
             } else {
                 //connected to server, but returned an error
                 if (opt.error) {
@@ -1714,6 +1728,10 @@
         //finally, add AJAX request to queue
         ajaxQueue.unshift({ req: req, opt: opt });
         runAjaxQueue();
+    }
+
+    window['$'].getJSON = function (url, complete, error) {
+        $.ajax(url, { dataType:'json', complete: complete, error: error });
     }
 
     function runAjaxQueue() {

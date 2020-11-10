@@ -632,9 +632,10 @@
                     entered = tru;
                 }
             });
+            var that = this;
             this.on('mouseleave', args[0], args[1], function (e) {
                 let p = e, f = fals;
-                while (p != null) { if (p == elem) { f = tru; break; } p = p.parentNode; }
+                while (p != null) { if (that.filter(a => a == p).length > 0) { f = tru; break; } p = p.parentNode; }
                 if (!f) {
                     entered = fals;
                     if (args[3]) { args[3](e); }
