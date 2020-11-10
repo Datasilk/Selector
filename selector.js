@@ -628,14 +628,18 @@
             let entered = fals;
             this.on('mouseenter', args[0], args[1], function (e) {
                 if (!entered) {
-                    if (args[2]) { args[2](e); }
                     entered = tru;
+                    if (args[2]) { args[2](e); }
                 }
             });
-            var that = this;
             this.on('mouseleave', args[0], args[1], function (e) {
-                let p = e, f = fals;
-                while (p != null) { if (that.filter(a => a == p).length > 0) { f = tru; break; } p = p.parentNode; }
+                let p = e.target.parentNode, f = fals;
+                while (p != null) { 
+                    if (p == this) { 
+                        f = tru; break; 
+                    } 
+                    p = p.parentNode; 
+                }
                 if (!f) {
                     entered = fals;
                     if (args[3]) { args[3](e); }
