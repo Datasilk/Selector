@@ -5,6 +5,7 @@
 (function () {
 
     //global variables
+    if (!window.selector) { window.selector = '$';}
     const tru = true;
     const fals = false;
     const doc = document;
@@ -1662,7 +1663,7 @@
     // create public selector object //////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /** @noalias */
-    window['$'] = function(selector) {
+    window[window.selector] = function(selector) {
         return new select(selector);
     }
 
@@ -1670,7 +1671,7 @@
     // add functionality to the $ object //////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /** @noalias */
-    window['$'].ajax = function () {
+    window[window.selector].ajax = function () {
         let args = normalizeArgs([
             { t: 1, o: tru }, //0: url = string (optional)
             { t: 4, o: tru }, //1: settings = object (optional)
@@ -1734,7 +1735,7 @@
         runAjaxQueue();
     }
 
-    window['$'].getJSON = function (url, complete, error) {
+    window[window.selector].getJSON = function (url, complete, error) {
         $.ajax(url, { dataType:'json', complete: complete, error: error });
     }
 
@@ -1760,7 +1761,7 @@
     /**
      * @param {...string|boolean} var_args
      */
-    window['$'].extend = function (var_args) {
+    window[window.selector].extend = function (var_args) {
         let extended = {};
         let deep = fals;
         let i = 0;
@@ -1778,7 +1779,7 @@
                 if (Object.prototype.hasOwnProperty.call(obj, prop)) {
                     // If deep merge and property is an object, merge properties
                     if (deep && Object.prototype.toString.call(obj[prop]) === '[object Object]') {
-                        extended[prop] = window['$'].extend(1, extended[prop], obj[prop]);
+                        extended[prop] = window[window.selector].extend(1, extended[prop], obj[prop]);
                     } else {
                         extended[prop] = obj[prop];
                     }
