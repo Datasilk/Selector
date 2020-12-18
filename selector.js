@@ -1327,6 +1327,14 @@
             }
         },
 
+        reduce: function (callback, accumulator) {
+            for (var x = 0; x < this.length; x++) {
+                var elem = this[x];
+                accumulator = callback(accumulator, elem);
+            }
+            return accumulator;
+        },
+
         remove: function (selector) {
             //Remove the set of matched elements from the DOM
             this.each(function (e) {
