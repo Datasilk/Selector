@@ -333,7 +333,7 @@
                     seltype = 2;
                 }
             }
-            this.each(function (e) {
+            this.each(function (i, e) {
                 if (seltype == 1) {
                     //get child from index
                     elems.push(e.children[sel]);
@@ -372,7 +372,7 @@
                 for (let x in params) {
                     //if params is an object with key/value pairs, apply styling to elements\
                     haskeys = tru;
-                    this.each(function (e) {
+                    this.each(function (i, e) {
                         setStyle(e, x, params[x]);
                     });
                 }
@@ -380,7 +380,7 @@
                 if (isType(params, 5)) {
                     //if params is an array of style names, return an array of style values
                     let vals = [];
-                    this.each(function (e) {
+                    this.each(function (i, e) {
                         let props = new Object();
                         params.forEach(function (param) {
                             const prop = e.style[styleName(param)];
@@ -395,7 +395,7 @@
                 const arg = arguments[1];
                 if (isType(arg, 1)) {
                     //set a single style property if two string arguments are supplied (key, value);
-                    this.each(function (e) {
+                    this.each(function (i, e) {
                         setStyle(e, name, arg);
                     });
                 } else {
@@ -408,7 +408,7 @@
                         } else {
                             //return an array of strings for multiple elements
                             let vals = [];
-                            this.each(function (e) {
+                            this.each(function (i, e) {
                                 let val = e.style[name];
                                 if (val == null) { val = ''; }
                                 vals.push(val);
@@ -427,14 +427,14 @@
             //this keyword refers to the current item  = function(also passed as the second argument to the function). 
             //If the iterator select.prototype.returns 0, iteration stops.
             for (let x = 0; x < this.length; x++) {
-                func.call(this, this[x]);
+                func.call(this, x, this[x]);
             }
             return this;
         },
 
         empty: function (func) {
             //Clear DOM contents of each element in the collection.
-            this.each(function (e) {
+            this.each(function (i, e) {
                 e.innerHTML = '';
             });
             return this;
@@ -472,7 +472,7 @@
                 //filter selector string
                 const found = query(document, sel);
                 if (found.length > 0) {
-                    this.each(function (e) {
+                    this.each(function (i, e) {
                         if (found.indexOf(e) >= 0) {
                             //make sure no duplicates are being added to the array
                             if (elems.indexOf(e) < 0) { elems.push(e); }
@@ -487,7 +487,7 @@
             //Find elements that match CSS selector executed in scope of nodes in the current collection.
             let elems = [];
             if (this.length > 0) {
-                this.each(function (e) {
+                this.each(function (i, e) {
                     const found = query(e, sel);
                     if (found.length > 0) {
                         found.forEach(function (a) {
@@ -521,7 +521,7 @@
             //any number of descendants that match a selector, or that contain a specific DOM node.
             let elems = [];
             if (this.length > 0) {
-                this.each(function (e) {
+                this.each(function (i, e) {
                     if (query(e, selector).length > 0) {
                         if (elems.indexOf(e) < 0) { elems.push(e); }
                     }
@@ -568,7 +568,7 @@
                 const n = parseFloat(obj);
                 if (!isNaN(n)) { obj = n; } else {
                     //height is string
-                    this.each(function (e) {
+                    this.each(function (i, e) {
                         if (e != window && e != document) {
                             e.style.height = obj;
                         }
@@ -598,11 +598,11 @@
             } else {
                 //height is a number
                 if (obj == 0) {
-                    this.each(function (e) {
+                    this.each(function (i, e) {
                         e.style.height = 0;
                     });
                 } else {
-                    this.each(function (e) {
+                    this.each(function (i, e) {
                         e.style.height = obj + 'px';
                     });
                 }
@@ -612,7 +612,7 @@
 
         hide: function () {
             //Hide elements in this collection by setting their display CSS property to none.
-            this.each(function (e) {
+            this.each(function (i, e) {
                 e.style.display = 'none';
             });
             return this;
@@ -660,7 +660,7 @@
                     return '';
                 }
             } else {
-                this.each(function (e) {
+                this.each(function (i, e) {
                     e.innerHTML = obj;
                 });
             }
@@ -787,7 +787,7 @@
         next: function (selector) {
             //Get the next sibling optionally filtered by selector of each element in the collection.
             let elems = [];
-            this.each(function (e) {
+            this.each(function (i, e) {
                 let el = e.nextSibling;
                 if (selector && el) {
                     //use selector
@@ -820,7 +820,7 @@
             let elems = [];
             if (selector) {
                 //use selector
-                this.each(function (e) {
+                this.each(function (i, e) {
                     const q = query(e, selector);
                     let n = e.nextSibling;
                     while (n) {
@@ -835,7 +835,7 @@
                 });
             } else {
                 //no selector
-                this.each(function (e) {
+                this.each(function (i, e) {
                     let n = e.nextSibling;
                     while (n) {
                         while (n.nodeName == '#text') {
@@ -877,7 +877,7 @@
                 { t: 1, o: tru }, //1: selector = string (optional)
                 { t: 6, o: fals }  //2: handler = function
             ], arguments);
-            this.each(function (e) {
+            this.each(function (i, e) {
                 for (let x = 0; x < listeners.length; x++) {
                     if (listeners[x].elem == e) {
                         //found element in listeners array, now find specific function (func)
@@ -983,7 +983,7 @@
                 if (ev == "hover") {
                     this.hover(args[1], args[2], args[3], args[3]);
                 } else {
-                    this.each(function (e) {
+                    this.each(function (i, e) {
                         let params = [args[1], args[3]];
                         if (args[1] != null && args[1] != '') {
                             function delegate(el) {
@@ -1048,7 +1048,7 @@
             //Get immediate parents of each element in the collection. 
             //If CSS selector is given, filter results to include only ones matching the select.
             let elems = [];
-            this.each(function (e) {
+            this.each(function (i, e) {
                 const el = e.parentNode;
                 if (selector == null || selector == '') {
                     if (elems.indexOf(el) < 0) {
@@ -1068,7 +1068,7 @@
             //Get all ancestors of each element in the selector. 
             //If CSS selector is given, filter results to include only ones matching the select.
             let elems = [];
-            this.each(function (e) {
+            this.each(function (i, e) {
                 let el = e.parentNode;
                 while (el) {
                     if (selector == null || selector == '') {
@@ -1122,7 +1122,7 @@
         prev: function (selector) {
             //Get the previous sibling optionally filtered by selector of each element in the collection.
             let elems = [];
-            this.each(function (e) {
+            this.each(function (i, e) {
                 let el = e.previousSibling;
                 if (selector && el) {
                     //use selector
@@ -1169,13 +1169,13 @@
                 if (v != null) {
                     if (v == '--') {
                         //remove
-                        this.each(function (e) {
+                        this.each(function (i, e) {
                             e.removeAttribute(a);
                         });
                     } else {
                         //set
                         if (v == fals) {
-                            this.each(function (e) {
+                            this.each(function (i, e) {
                                 e.removeAttribute(a);
                             });
                         } else {
@@ -1194,13 +1194,13 @@
                 if (v != null) {
                     if (v == '--') {
                         //remove
-                        this.each(function (e) {
+                        this.each(function (i, e) {
                             e.style.removeProperty(a);
                         });
                     } else {
                         //set
                         v = v == 0 ? fals : tru;
-                        this.each(function (e) {
+                        this.each(function (i, e) {
                             e.style.setProperty(a, v);
                         });
                     }
@@ -1243,7 +1243,7 @@
                 case "selectedIndex":
                     if (v != null) {
                         if (v === parseInt(v, 10)) {
-                            this.each(function (e) {
+                            this.each(function (i, e) {
                                 if (e.nodeType == 'SELECT') {
                                     e.selectedIndex = v;
                                 }
@@ -1337,7 +1337,7 @@
 
         remove: function (selector) {
             //Remove the set of matched elements from the DOM
-            this.each(function (e) {
+            this.each(function (i, e) {
                 e.parentNode.removeChild(e);
             });
             this.push([]);
@@ -1349,12 +1349,12 @@
             let obj = getObj(attr);
             if (isType(obj, 5)) {
                 obj.forEach(function (a) {
-                    this.each(function (e) {
+                    this.each(function (i, e) {
                         e.removeAttribute(a);
                     });
                 });
             } else if (typeof obj == 'string') {
-                this.each(function (e) {
+                this.each(function (i, e) {
                     e.removeAttribute(obj);
                 });
             }
@@ -1373,7 +1373,7 @@
                 }
             }
             if (isType(obj, 5)) {
-                this.each(function (e) {
+                this.each(function (i, e) {
                     obj.forEach(function (a) {
                         if (e.className) {
                             e.className = e.className.split(' ').filter(function (b) { return b != '' && b != a; }).join(' ');
@@ -1381,7 +1381,7 @@
                     });
                 });
             } else if (typeof obj == 'string') {
-                this.each(function (e) {
+                this.each(function (i, e) {
                     if (e.className) {
                         e.className = e.className.split(' ').filter(function (b) { return b != '' && b != obj; }).join(' ');
                     }
@@ -1462,7 +1462,7 @@
         show: function () {
             //Display the matched elements
             this.removeClass('hide');
-            this.each(function (e) {
+            this.each(function (i, e) {
                 e.style.display = 'block';
             });
             return this;
@@ -1499,18 +1499,18 @@
 
             if (sel != null) {
                 if (isType(sel, 5)) {
-                    this.each(function (e) {
+                    this.each(function (i, e) {
                         sel.forEach(function (s) {
                             find(e, s);
                         });
                     });
                 } else {
-                    this.each(function (e) {
+                    this.each(function (i, e) {
                         find(e, sel);
                     });
                 }
             } else {
-                this.each(function (e) {
+                this.each(function (i, e) {
                     find(e, null);
                 });
             }
@@ -1543,7 +1543,7 @@
 
         toggle: function () {
             //Display or hide the matched elements
-            this.each(function (e) {
+            this.each(function (i, e) {
                 if (e.style.display == 'none') {
                     e.style.display = '';
                 } else { e.style.display = 'none'; }
@@ -1558,7 +1558,7 @@
                 obj = obj.split(' ');
             }
             if (isType(obj, 5)) {
-                this.each(function (e) {
+                this.each(function (i, e) {
                     let c = e.className;
                     let b = -1;
                     if (c != null && c != '') {
@@ -1606,7 +1606,7 @@
                 const n = parseFloat(obj);
                 if (!isNaN(n)) { obj = n; } else {
                     //width is string
-                    this.each(function (e) {
+                    this.each(function (i, e) {
                         if (e != window && e != document) {
                             e.style.width = obj;
                         }
@@ -1636,11 +1636,11 @@
             } else {
                 //width is a number
                 if (obj == 0) {
-                    this.each(function (e) {
+                    this.each(function (i, e) {
                         e.style.width = 0;
                     });
                 } else {
-                    this.each(function (e) {
+                    this.each(function (i, e) {
                         e.style.width = obj + 'px';
                     });
                 }
