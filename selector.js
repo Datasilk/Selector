@@ -917,7 +917,7 @@
                                     //remove specific event from element in listeners array
                                     const ev = item.events[y];
                                     for (let z = 0; z < ev.list.length; z++) {
-                                        if (ev.list[z][1].toString() === args[2].toString() //check function match
+                                        if (ev.list[z][1] && ev.list[z][1].toString() === args[2].toString() //check function match
                                             && ev.list[z][0] == args[1]) { //check selector match
                                             e.removeEventListener(args[0], args[2], tru);
                                             listeners[x].events[y].list.splice(z, 1);
