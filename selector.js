@@ -877,6 +877,9 @@
                 { t: 1, o: tru }, //1: selector = string (optional)
                 { t: 6, o: fals }  //2: handler = function
             ], arguments);
+            if (arguments.length > 1 && typeof arguments[1] == 'undefined') {
+                return;
+            }
             this.each(function (i, e) {
                 for (let x = 0; x < listeners.length; x++) {
                     if (listeners[x].elem == e) {
