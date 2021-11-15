@@ -1074,11 +1074,8 @@
             this.each(function (i, e) {
                 let el = e.parentNode;
                 while (el) {
-                    if (selector == null || selector == '') {
-                        if (elems.indexOf(el) < 0) {
-                            elems.push(el);
-                        }
-                    } else {
+                    //get parents from selector match
+                    if (typeof selector == 'string' && selector != '') {
                         if (el.matches) {
                             if (el.matches(selector)) {
                                 if (elems.indexOf(el) < 0) {
@@ -1091,6 +1088,17 @@
                                     elems.push(el);
                                 }
                             }
+                        }
+                    } else if (selector == null || selector == '') {
+                        //get all parents
+                        if (elems.indexOf(el) < 0) {
+                            elems.push(el);
+                        }
+                    } else if(selector) {
+                        //get parents from selector array
+                        var filter = $(selector).filter((i, a) => a == el);
+                        if (filter.length > 0) {
+                            elems.push(el);
                         }
                     }
                     el = el.parentNode;
