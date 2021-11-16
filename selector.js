@@ -1598,8 +1598,8 @@
         val: function (value) {
             //Get the current value of the first element in the set of matched elements or set the value of every matched element
             if (value != null) {
-                this.each(function (a) {
-                    a.value = value;
+                this.each(function (i, e) {
+                    e.value = value;
                 });
             } else {
                 if (this.length > 0) {
